@@ -2,6 +2,7 @@ package com.kahraman.springboot_project.controller;
 
 import com.kahraman.springboot_project.model.Employee;
 import com.kahraman.springboot_project.service.IEmployeeService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,9 @@ public class EmployeeController {
     }
 
     @GetMapping("list")
-    public ResponseEntity<List<Employee>> getAllEmployees(){
-        List<Employee> employeesList = this.employeeService.getAllEmployees();
+    public ResponseEntity<List<Employee>> getAllEmployees(@RequestParam (required = false, defaultValue= "1") int pageNo, @RequestParam (required = false, defaultValue= "5") int pageSize){
+        PageRequest pageRequest = PageRequest.of(pageNo-1, pageSize);
+        List<Employee> employeesList = this.employeeService.getAllEmployees(pageRequest);
         return new ResponseEntity<>(employeesList, HttpStatus.OK);
     }
 
